@@ -1,22 +1,64 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, Button} from 'react-native';
+import {StyleSheet, Text, View, Image, Animated } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {TouchableOpacity} from 'react-native-gesture-handler'
 
 export default class StartScreen extends Component {
-  render() {
+  state = {
+    animation: new Animated.Value(0)
+  }
+
+  clkLogin() {
     return (
-      <View style={styles.container}>
-        <View style={styles.header} />
-        <View style={styles.title}>
-          <Text style={{fontSize:35,color:'black',fontWeight: 'bold'}}>서울과기대</Text>
-          <Text style={{fontSize:35,color:'black',fontWeight: 'bold'}}>공릉병원</Text>
-        </View>
-        <View style={styles.content}>
-        </View>
-        <View style={styles.footer}>
-          <Button title='회원가입'>/</Button>
-          <Button title='로그인'>/</Button>
-        </View>
+      <View style={{flex: 1}}>
+        <Text>hi</Text>
       </View>
+    )
+  }
+
+  componentDidMount() {
+    Animated.timing(
+      this.state.animation,
+      {
+        toValue: 1,
+        duration: 2000,
+      }
+    ).start();
+  }
+
+  render() {
+    const animationStyles = {
+      opacity: this.state.animation
+    };
+
+    return (
+        <View style={styles.container}>
+        <Animated.View style={[styles.content, animationStyles]}>
+          <Text style={styles.title}>당신의</Text>
+          <Text style={[styles.title, {color: '#3DB7CC'}]}>똑똑한</Text>
+          <Text style={styles.title}>온라인 닥터</Text>
+        </Animated.View>
+        <View style={styles.footer}>
+          
+        <LinearGradient colors={['#3DB7CC' ,'#86E57F']} useAngle={true} angle={60} location={[0.5, 1]} style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={()=>this.props.navigation.navigate('Login')}>
+            <Text style={styles.btText}>로그인</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+          
+          <LinearGradient colors={['#3DB7CC' ,'#86E57F']} useAngle={true} angle={60} location={[0.5, 1]} style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={()=>this.props.navigation.navigate('Chat')}>
+            <Text style={styles.btText}>로그인없이 계속</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+
+          <View style={{flexDirection: 'row', margin: 10, }}>
+          <Text style={{fontStyle: 'italic', padding: 1, color: 'gray'}}>회원이 아니신가요? </Text>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Join')}><Text style={{marginLeft: 10, padding: 1}}>회원가입</Text></TouchableOpacity>
+          </View>
+        </View>
+        </View>
+      
     );
   }
 }
@@ -24,31 +66,33 @@ export default class StartScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: 'white',
-  },
-  header: {
-    width:'100%',
-    height:'25%',
-    //backgroundColor: '#ff9a9a',
+    alignItems: 'center',
   },
   title: {
-    width:'100%',
-    height:'20%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    //backgroundColor: '#9aa9ff',
+    fontSize: 45,
+    color: '#8c8c8c',
   },
   content: {
-    flex: 1,
+    flex: 5,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom:30,
-    //backgroundColor: '#d6ca1a',
+    alignItems: 'flex-start',
   },
   footer: {
-    width:'100%',
-    height:'40%',
-    //backgroundColor: '#1ad657',
+    flex: 5,
+    alignItems: 'center',
   },
+  button: {
+    margin: 10,
+    borderRadius: 25,
+    width: 250,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btText: {
+    color: 'white',
+    fontSize: 17,
+    fontWeight: 'bold',
+  }
+
 });
