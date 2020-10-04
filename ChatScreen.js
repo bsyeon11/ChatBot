@@ -1,20 +1,10 @@
-/*import 'react-native-gesture-handler';
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-
-export default function App() {
-  return (
-    <NavigationContainer>{/* Rest of your app code }</NavigationContainer>
-  );
-}
-*/
-/* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, TouchableOpacity, Modal } from 'react-native';
 import { GiftedChat, Send, InputToolbar, SystemMessage, Bubble, MessageImage, } from 'react-native-gifted-chat';
 import { Dialogflow_V2 } from 'react-native-dialogflow';
-import { dialogflowConfig } from './env';
 import QuickReplies from 'react-native-gifted-chat/lib/QuickReplies';
+import { dialogflowConfig } from './env';
+import ModalPost from './ModalPost';
 
 const BOT_USER = {
   _id: 2,
@@ -27,33 +17,17 @@ const IMAGES = {
     uri: require('./medical.jpg'),
   },
 }
-const REPLY = {
-  type: 'radio', // or 'checkbox',
-          keepIt: true,
-          values: [
-            {
-              title: '진료예약',
-              value: '진료예약',
-              messageId : 1
-            },
-            {
-              title: '예약변경 및 취소',
-              value: '예약확인',
-              messageId : 1
-            },
-          ]
-}
 
 class ChatScreen extends Component {
 
   state = {
+    modalVisible: false,
     messages: [
       {
         _id: 1,
         text: '안녕하세요. 공릉병원 스마트봇입니다. 무엇을 도와드릴까요?',
         createdAt: new Date(),
         user: BOT_USER,
-      //  image: './medical.jpg',
         quickReplies: {
           type: 'radio', // or 'checkbox',
           keepIt: true,
@@ -65,7 +39,7 @@ class ChatScreen extends Component {
             },
             {
               title: '진료시간',
-              value: '진료안내',
+              value: '진료시간',
               messageId : 1
             },
             {
@@ -106,7 +80,8 @@ class ChatScreen extends Component {
   }
 
   onSend(messages = []) {
-    this.setState(previousState => ({
+      this.setState(previousState => ({
+      modalVisible: previousState.modalVisible,
       messages: GiftedChat.append(previousState.messages, messages)
     }));
 
@@ -118,13 +93,35 @@ class ChatScreen extends Component {
     );
   }
 
+  onToggle = () => {
+    this.setState({
+      modalVisible: !this.state.modalVisible,
+      messages: this.state.messages
+    });
+  };
+
   onQuickReply(replies = []) {
     let reply = replies[0].value;
-    Dialogflow_V2.requestQuery(
-      reply,
-      result => this.handleGoogleResponse(result),
-      error => console.log(error)
-    );
+    let msg = {
+      _id: this.state.messages.length + 1,
+      text: reply,
+      createdAt: new Date(),
+      user: {
+        _id: 1,
+      },
+    };
+    if(reply=='진료예약') {
+      this.onToggle();
+    }
+    else if(reply=='예약확인') {
+      this.props.navigation.navigate('List');
+    }
+    else if(reply=='설정') {
+      this.props.navigation.navigate('Setting');
+    }
+    else {
+      this.onSend([msg])
+    }
   }
   
   sendBotResponse(text) {
@@ -133,10 +130,10 @@ class ChatScreen extends Component {
       text,
       createdAt: new Date(),
       user: BOT_USER,
-    //  quickReplies: REPLY,
     };
 
     this.setState(previousState => ({
+      modalVisible: previousState.modalVisible,
       messages: GiftedChat.append(previousState.messages, [msg])
     }));
   }
@@ -152,20 +149,7 @@ class ChatScreen extends Component {
         </Send>
     );
   }
-/*
-  renderMessageImage(props) {
-    return (
-      <MessageImage
-        {...props}
-        source={IMAGES.medical.uri}
-        imageStyle={{
-          width: 100,
-          height: 80,
-        }}
-      />
-    )
-  }
-*/
+
   renderInputToolBar(props) {
     return (
       <InputToolbar
@@ -183,29 +167,6 @@ class ChatScreen extends Component {
       </InputToolbar>
     );
   }
-  
-/*  renderSystemMessage() {
-      return (
-        <SystemMessage
-          {...props}
-          wrapperStyle={styles.systemMessageWrapper}
-          textStyle={styles.systemMessageText}
-        />
-      );
-  }
-
-  renderQuickReply(props) {
-    return (
-      <QuickReplies {...props}
-        quickReplyStyle={{
-          height: 17
-        }}
-        color={'red'}
-      >
-      </QuickReplies>
-    )
-  }
-*/
 
   renderBubble(props) {
     return (
@@ -229,41 +190,40 @@ class ChatScreen extends Component {
     );
   }
 
-  
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#FBF7F8' }}>
-        <View style={{height: 50, borderBottomColor: '#bdbdbd', borderBottomWidth: 1, flexDirection:'row', alignItems: 'center'}}>
-          <TouchableOpacity onPress={null} style={{alignItems: 'flex-start', flex: 1, marginHorizontal: 20 }}>
-                <Image style={{height: 20, width: 30}} source={require('./back.png')}></Image>
-            </TouchableOpacity>
-          <View sytle={{flex: 1}}><Text style={{color: '#3DB7CC', fontSize: 18, fontWeight: 'bold'}}>공 릉 병 원</Text></View>
-          <TouchableOpacity onPress={null} style={{alignItems: 'flex-end', flex: 1, marginHorizontal: 20 }}>
-                <Image style={{height: 15, width: 20}} source={require('./list.png')}></Image>
-            </TouchableOpacity>
-        </View>
+      <View style={{ flex: 1, backgroundColor: '#FBF7F8'}}>
+        <Modal
+          animationType='fade'
+          visible={this.state.modalVisible}
+          transparent={true}
+        >
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}></View>
+        </Modal>
+        <ModalPost
+          onPress={this.onToggle}
+          modalVisible={this.state.modalVisible}
+        />
         <View style={{flex:11}}>
         <GiftedChat
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
-          //onPressActionButton={this.props.navigation.navigate('Profile')}
+          renderQuickReplies={(props) => <QuickReplies color='white' {...props} />}
           onQuickReply={replies => this.onQuickReply(replies)}
           showAvatarForEveryMessage={true}
           alwaysShowSend={true}
           alignTop={true}
           placeholder='메시지를 입력하세요'
           maxInputLength={100}
-          //renderSystemMessage={this.renderSystemMessage}
           renderBubble={this.renderBubble}
           renderSend={this.renderSend}
           renderAvatarOnTop={true}
           renderInputToolbar={this.renderInputToolBar}
-          //enderMessageImage={this.renderMessageImage}
-          //renderQuickReply={this.renderQuickReply}
+          quickReplyStyle={{backgroundColor: /*'#2c3e50'*/'gray', borderRadius: 20, height: 40, width: 80, margin: 2, marginTop: 5}}
           user={{
             _id: 1
           }}
-        />
+        />      
         </View>
       </View>
     );
