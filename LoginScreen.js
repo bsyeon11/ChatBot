@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Image, TextInput, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {TouchableOpacity} from 'react-native-gesture-handler'
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import deviceStorage from './deviceStorage';
 
 export default class LoginScreen extends Component {
     constructor(props){
@@ -28,6 +29,8 @@ export default class LoginScreen extends Component {
         .then((responseJson) => {
             this.setState({checkLogin: responseJson.success});
             if(this.state.checkLogin == 1) {
+                Alert.alert(responseJson.data.username+" 님 반갑습니다.");
+                deviceStorage.saveItem("id_token", responseJson.access_token);
                 this.props.navigation.navigate('Chat');
             }
             else{
@@ -61,9 +64,12 @@ export default class LoginScreen extends Component {
                 <Text style={styles.btText}>로그인</Text>
                 </TouchableOpacity>
             </LinearGradient>
-            <View style={{flexDirection: 'row', margin: 5, }}>
-                <Text style={{fontStyle: 'italic', padding: 1, color: 'gray'}}>회원이 아니신가요? </Text>
-                <TouchableOpacity onPress={()=>this.props.navigation.navigate('Join')}><Text style={{marginLeft: 10, padding: 1}}>회원가입</Text></TouchableOpacity>
+            <View style={{flexDirection: 'row', alignItems: 'center' }}>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate('Join')}><Text style={{margin: 10, padding: 1}}>회원가입</Text></TouchableOpacity>
+                <Text>|</Text>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate('Reset')}><Text style={{margin: 10, padding: 1}}>비밀번호 찾기</Text></TouchableOpacity>
+                <Text>|</Text>
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate('Start')}><Text style={{margin: 10, padding: 1}}>처음으로</Text></TouchableOpacity>
             </View>
         </View>
     );

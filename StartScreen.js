@@ -56,6 +56,11 @@ export default class StartScreen extends Component {
           <Text style={{fontStyle: 'italic', padding: 1, color: 'gray'}}>회원이 아니신가요? </Text>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('Join')}><Text style={{marginLeft: 10, padding: 1}}>회원가입</Text></TouchableOpacity>
           </View>
+
+          <View style={{flexDirection: 'row', }}>
+          <Text style={{fontStyle: 'italic', padding: 1, color: 'gray'}}>비밀번호를 잊으셨나요? </Text>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('Reset')}><Text style={{marginLeft: 10, padding: 1}}>비밀번호 찾기</Text></TouchableOpacity>
+          </View>
         </View>
         </View>
       

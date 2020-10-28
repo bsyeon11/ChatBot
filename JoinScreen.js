@@ -86,7 +86,12 @@ export default class JoinScreen extends Component {
                     <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>가 입 하 기</Text>
                 </TouchableOpacity>
                 </View>
+                <View style={{flexDirection: 'row',}}>
+                 <Text style={{fontStyle: 'italic', padding: 1, color: 'gray'}}>처음으로 돌아가려면 </Text>
+                 <TouchableOpacity onPress={()=>this.props.navigation.navigate('Start')}><Text style={{marginLeft: 10, padding: 1}}>처음으로</Text></TouchableOpacity>
+                </View>
             </View>
+            
             <View style = {styles.footer}>
                 <Image source={require('./icon.png')} style={{height: 30, width: 35, marginRight: 10, marginBottom: 10}}/>
                 <Text style={styles.logo}>서울과기대 공릉병원</Text>
@@ -122,6 +127,7 @@ const styles = StyleSheet.create({
         padding: 30,
         height: 400,
         borderRadius: 40,
+        margin: 20,
     },
     footer: {
         height: 40,
