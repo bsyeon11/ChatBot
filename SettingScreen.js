@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Alert } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {TouchableOpacity} from 'react-native-gesture-handler'
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class SettingScreen extends Component {
   state = {
@@ -26,18 +25,27 @@ export default class SettingScreen extends Component {
 }
 
   render() {
-
     return (
         <View style={styles.container}>
          <View style={styles.content}>
+           <TouchableOpacity>           
+             <Text style={styles.title}>프로필 수정</Text></TouchableOpacity>
          </View>
-         <View style={styles.footer}>
-          
-          <LinearGradient colors={['#3DB7CC' ,'#86E57F']} useAngle={true} angle={60} location={[0.5, 1]} style={styles.button}>
-          <TouchableOpacity style={styles.button} onPress={this._Logout}>
-            <Text style={styles.btText}>로그아웃</Text>
-            </TouchableOpacity>
-          </LinearGradient>
+         <View style={styles.content}>
+           <TouchableOpacity>           
+             <Text style={styles.title}>개인정보처리방침</Text></TouchableOpacity>
+         </View>
+         <View style={styles.content}>           
+             <Text style={styles.title}>버전정보</Text>
+             <Text style={[styles.title, {color: '#3DB7CC'}]}>    ver 1.0.0</Text>
+         </View>
+         <View style={styles.content}>
+           <TouchableOpacity onPress={this._Logout}>           
+             <Text style={styles.title}>로그아웃</Text></TouchableOpacity>
+         </View>
+         <View style={styles.content}>
+           <TouchableOpacity>           
+             <Text style={styles.title}>탈퇴하기</Text></TouchableOpacity>
          </View>
         </View>
     );
@@ -50,24 +58,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
-    flex: 8,
-  },
-  footer: {
-    flex: 2,
-    alignItems: 'center',
-  },
-  button: {
-    margin: 10,
-    borderRadius: 20,
-    width: 250,
-    height: 50,
+    width: '100%',
+    height: 60,
+    backgroundColor: 'white',
     justifyContent: 'center',
-    alignItems: 'center',
+    padding: 10,
+    paddingLeft: 15,
+    marginVertical: 1,
   },
-  btText: {
-    color: 'white',
-    fontSize: 17,
-    fontWeight: 'bold',
+  title: {
+    fontSize: 15,
   }
 
 });
