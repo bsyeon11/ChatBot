@@ -12,7 +12,10 @@ import LoginScreen from './LoginScreen';
 import Profile from './Profile';
 import ListScreen from './ListScreen';
 import SettingScreen from './SettingScreen';
-
+import ResetScreen from './ResetScreen';
+import ResetPassword from './ResetPassword';
+import Security from './Security';
+import MyProfileScreen from './MyProfileScreen';
 const Stack = createStackNavigator();
 
 function App() {
@@ -41,6 +44,16 @@ function App() {
         <Stack.Screen name='Profile' component={Profile} options={{headerShown: false}}/>
         <Stack.Screen name='Join' component={JoinScreen} options={{headerShown: false}}/>
         <Stack.Screen name='Login' component={LoginScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='Reset' component={ResetScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='Security' component={Security} 
+            options={{title: '개인정보처리방침',
+              headerTintColor: '#3DB7CC', 
+              headerTitleStyle: {
+              fontSize: 18, 
+              fontWeight: 'bold'
+            },
+        }}/>
+        <Stack.Screen name='ResetPassword' component={ResetPassword} options={{headerShown: false}}/>
         <Stack.Screen 
           name='List' 
           component={ListScreen} 
@@ -57,6 +70,17 @@ function App() {
           component={SettingScreen} 
           options={{
             title: '설 정',
+            headerTintColor: '#3DB7CC', 
+            headerTitleStyle: {
+              fontSize: 18, 
+              fontWeight: 'bold'
+            },
+          }}/>
+          <Stack.Screen 
+          name='MyProfileScreen' 
+          component={MyProfileScreen} 
+          options={{
+            title: '프로필 수정',
             headerTintColor: '#3DB7CC', 
             headerTitleStyle: {
               fontSize: 18, 
